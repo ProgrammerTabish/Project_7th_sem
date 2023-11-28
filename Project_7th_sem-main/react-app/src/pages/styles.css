@@ -213,4 +213,7 @@
     margin:12px;
    
    }
-   
+   .warning{
+    font-weight: 600;
+    color:red;
+   }

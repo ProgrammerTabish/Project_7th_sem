@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import LogoutButton from "./LogoutButton";
 useEffect;
 useState;
 const CitizenDashBoard = () => {
@@ -51,7 +52,8 @@ function NavComop({ activeLink, val, handleLink }) {
           onClick={() => handleLink(3)}
         >
           {val[2]}
-        </a>
+        </a>{" "}
+        <LogoutButton />
       </nav>{" "}
     </>
   );
