@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+
 import LogoutButton from "./LogoutButton";
+import LocationPicker from "./LocationPicker";
 useEffect;
 useState;
 const CitizenDashBoard = () => {
@@ -63,32 +67,77 @@ function ProfileComp() {
   return (
     <>
       <main>
-        <div id="tracker-number">Phone Number: 8274568191</div>
-
-        <div className="change-password-form">
-          <h2>Change Password</h2>
-          <form>
-            <label htmlFor="newPassword">New Password:</label>
-            <input
-              type="password"
-              id="newPassword"
-              name="newPassword"
-              required
-            />
-
-            <label htmlFor="confirmPassword">Confirm Password:</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              required
-            />
-
-            <button type="submit">Change Password</button>
-          </form>
+        <div id="tracker-number">
+          Phone Number: {JSON.parse(sessionStorage.user).phone} (
+          {JSON.parse(sessionStorage.user).title})
         </div>
+
+        <ChangePasswordForm />
       </main>
     </>
+  );
+}
+
+function ChangePasswordForm() {
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+
+    // Check if the passwords match
+    if (newPassword !== confirmPassword) {
+      alert("Passwords do not match");
+      console.error("Passwords do not match");
+      return;
+    }
+
+    try {
+      // Make an API call to update the password
+      let title = JSON.parse(sessionStorage.user).title;
+      let phone = JSON.parse(sessionStorage.user).phone;
+      await axios.post("http://localhost:3001/change-password", {
+        title,
+        phone,
+        newPassword,
+      });
+
+      // Optionally, you can handle success (e.g., show a success message)
+      alert("Password changed successfully");
+    } catch (error) {
+      // Handle error (e.g., show an error message)
+
+      console.error("Error changing password:", error.response.data.error);
+    }
+  };
+
+  return (
+    <div>
+      <h2>Change Password</h2>
+      <form onSubmit={handleChangePassword}>
+        <label htmlFor="newPassword">New Password:</label>
+        <input
+          type="password"
+          id="newPassword"
+          name="newPassword"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          required
+        />
+
+        <label htmlFor="confirmPassword">Confirm Password:</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+        />
+
+        <button type="submit">Change Password</button>
+      </form>
+    </div>
   );
 }
 
@@ -97,27 +146,63 @@ function ComplainsComp() {
   let HandleChange = (val) => {
     changeOption(val);
   };
-
   function FileComplain() {
+    const [selectedLocation, setSelectedLocation] = useState([0, 0]);
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      console.log("submitted", {
+        name: e.target.name.value,
+        location: selectedLocation,
+        complaint: e.target.complaint.value,
+      });
+      // Add logic to send the complaint data to your server
+    };
+
     return (
       <>
-        <section>
-          <form onSubmit={console.log("submitted")}>
-            <label htmlFor="name">Your Name:</label>
-            <input type="text" id="name" name="name" required />
+        <section className="min-h-screen flex items-center justify-center p-6">
+          <form
+            className="max-w-screen-md w-full bg-white p-8 rounded-md shadow-md"
+            onSubmit={handleSubmit}
+          >
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Your Name:
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              className="mt-1 p-2 block w-full border rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
+            />
 
-            <label htmlFor="location">Location of the Issue:</label>
-            <input type="text" id="location" name="location" required />
-
-            <label htmlFor="complaint">Complaint Details:</label>
+            <div className="p-2 m-7">
+              <label className="p-2 m-2"> Pick a location on the map :</label>
+              <LocationPicker />
+            </div>
+            <label
+              htmlFor="complaint"
+              className="block text-sm font-medium text-gray-700 mt-4"
+            >
+              Complaint Details:
+            </label>
             <textarea
               id="complaint"
               name="complaint"
               rows="4"
               required
+              className="mt-1 p-2 block w-full border rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
             ></textarea>
-
-            <button type="submit">Submit Complaint</button>
+            <button
+              type="submit"
+              className="mt-4 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200"
+            >
+              Submit Complaint
+            </button>
           </form>
         </section>
       </>

@@ -142,14 +142,7 @@
      bottom: 0;
      width: 100%;
  }
- section {
-     max-width: 600px;
-     margin: 20px auto;
-     background-color: #fff;
-     padding: 20px;
-     border-radius: 8px;
-     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
- }
+ 
  label {
      display: block;
      margin-bottom: 8px;
@@ -171,6 +164,7 @@
      border: none;
      border-radius: 4px;
      cursor: pointer;
+     margin-top: 12px;
  }
  button:hover {
      background-color: #45a049;
