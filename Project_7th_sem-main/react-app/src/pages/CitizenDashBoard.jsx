@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 
 import LogoutButton from "./LogoutButton";
 import LocationPicker from "./LocationPicker";
+import MyMap from "./MyMap";
 useEffect;
 useState;
 const CitizenDashBoard = () => {
@@ -148,7 +149,9 @@ function ComplainsComp() {
   };
   function FileComplain() {
     const [selectedLocation, setSelectedLocation] = useState([0, 0]);
-
+    useEffect(() => {
+      console.log(selectedLocation);
+    });
     const handleSubmit = (e) => {
       e.preventDefault();
       console.log("submitted", {
@@ -182,7 +185,12 @@ function ComplainsComp() {
 
             <div className="p-2 m-7">
               <label className="p-2 m-2"> Pick a location on the map :</label>
-              <LocationPicker />
+              <div className="md:w-96 w-1/2">
+                <MyMap setCordinates={setSelectedLocation} />
+              </div>
+              <label className="p-2 m-2">
+                GPS co-ordinates: {selectedLocation[0]},{selectedLocation[1]}
+              </label>
             </div>
             <label
               htmlFor="complaint"
@@ -246,24 +254,23 @@ function ComplainsComp() {
 
     return (
       <>
-        <main>
-          <div
-            id="map"
-            style={{
-              height: "400px",
-              width: "100%",
-              border: "1px solid #ccc",
-              marginBottom: "20px",
-            }}
-          ></div>
-
-          <div className="tracking-info">
-            <h2>Current Location</h2>
-            <p>Latitude: 40.7128</p>
-            <p>Longitude: -74.0060</p>
-            <p>Last Update: 2023-11-14 12:30 PM</p>
+        <div className="min-h-screen bg-gray-100">
+          <div className="flex">
+            {/* Map Section (70% of the screen) */}
+            <div className="w-70vw h-screen z-4"></div>
+            <LocationPicker />
+            {/* Van Details Section (30% of the screen) */}
+            <div className="w-30vw p-4 bg-white rounded-xl">
+              <h2 className="text-xl font-semibold mb-4">Van Details</h2>
+              {/* Replace with actual van details or coordinates display */}
+              <div>
+                <p>Latitude: 40.7128</p>
+                <p>Longitude: -74.0060</p>
+                <p>Last Update: 2023-11-14 12:30 PM</p>
+              </div>
+            </div>
           </div>
-        </main>
+        </div>
       </>
     );
   }

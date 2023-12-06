@@ -26,37 +26,33 @@ const markers = [
     geocode: [19.901054, 75.352478],
     popUp: "Hello, I am pop up 1",
   },
-  {
-    geocode: [48.85, 2.3522],
-    popUp: "Hello, I am pop up 2",
-  },
-  {
-    geocode: [48.855, 2.34],
-    popUp: "Hello, I am pop up 3",
-  },
 ];
 
 export default function LocationPicker() {
   return (
-    <MapContainer center={[48.8566, 2.3522]} zoom={13}>
-      {/* OPEN STREEN MAPS TILES */}
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+    <div className="map-container">
+      <MapContainer center={[18.6122063552147, 76.232]} zoom={5}>
+        {/* OPEN STREET MAP TILES */}
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
 
-      {/* Commented out other TileLayer options for simplicity */}
+        {/* Uncomment the following line for simpler TileLayer options */}
+        {/* <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" /> */}
 
-      <MarkerClusterGroup
-        chunkedLoading
-        iconCreateFunction={createClusterCustomIcon}
-      >
-        {markers.map((marker, index) => (
-          <Marker key={index} position={marker.geocode} icon={customIcon}>
-            <Popup>{marker.popUp}</Popup>
-          </Marker>
-        ))}
-      </MarkerClusterGroup>
-    </MapContainer>
+        {/* Marker Cluster Group */}
+        <MarkerClusterGroup
+          chunkedLoading
+          iconCreateFunction={createClusterCustomIcon}
+        >
+          {markers.map((marker, index) => (
+            <Marker key={index} position={marker.geocode} icon={customIcon}>
+              <Popup>{marker.popUp}</Popup>
+            </Marker>
+          ))}
+        </MarkerClusterGroup>
+      </MapContainer>
+    </div>
   );
 }
